@@ -18,7 +18,8 @@ class Request:
         self.mode = mode
 
     def __str__(self):
-        return str(self.kind) + " " + str(self.temp) + " " + str(self.speed) + " " + str(self.room_id) + " " + str(self.mode)
+        return str(self.kind) + " " + str(self.temp) + " " + str(self.speed) + " " + str(self.room_id) + " " + str(
+            self.mode)
 
 
 class Aircon:
@@ -81,7 +82,7 @@ class Aircon:
                         self.queue.waiting_list2.append(request.room_id)
                         self.changeairs(request, 0)
                         return 1  # 表示该请求正在等待中
-                    
+
                     for i in range(len(self.queue.running_list)):  # 查看该请求是否可以调换出running_list里的请求
                         if self.queue.running_list[i][2] < request.speed:  # 找到了优先级较低的请求
                             # 移除优先级较低的请求到等待队列
@@ -99,14 +100,17 @@ class Aircon:
                             # , price: float, mode: int, ratio: float, aimteproture: int, isdispatch: int):
 
                             p = request.room_id - 301  # 用于获取相应从机数据的下标
-                            self.datahandle.writeData(self.airs[p].roomid, self.airs[p].starttime, datetime.datetime.now()
+                            self.datahandle.writeData(self.airs[p].roomid, self.airs[p].starttime,
+                                                      datetime.datetime.now()
                                                       , self.airs[p].wind, self.airs[p].price, self.airs[p].mode
-                                                      , self.airs[p].ratio, self.airs[p].aimtemp, self.airs[p].isdispatched)
+                                                      , self.airs[p].ratio, self.airs[p].aimtemp,
+                                                      self.airs[p].isdispatched)
 
                             # 把新请求加入到running_list
                             end = time.process_time()
                             t3 = end - self.start
-                            self.queue.running_list.append([request.room_id, t3, request.speed, request.temp, request.mode])
+                            self.queue.running_list.append(
+                                [request.room_id, t3, request.speed, request.temp, request.mode])
                             self.queue.running_list2.append(request.room_id)
                             self.changeairs(request, 1)
 
@@ -146,6 +150,10 @@ class Aircon:
                             self.queue.running_list[i][3] = request.temp
                         self.queue.running_list[i][4] = request.mode
                         p = request.room_id - 301
+                        self.datahandle.writeData(self.airs[p].roomid, self.airs[p].starttime, datetime.datetime.now(), 
+                                                  self.airs[p].wind, self.airs[p].price, self.airs[p].mode,
+                                                  self.airs[p].ratio, self.airs[p].aimtemp,self.airs[p].isdispatched)
+
                         if request.mode == -1 and self.airs[request.room_id - 301].curtemp < request.temp or \
                                 request.mode == 1 and self.airs[request.room_id - 301].curtemp > request.temp:
                             temp_list = self.queue.running_list.pop(i)
@@ -159,10 +167,6 @@ class Aircon:
                             self.changeairs(request, 0)
                             return 1
                         else:
-                            self.datahandle.writeData(self.airs[p].roomid, self.airs[p].starttime, datetime.datetime.now()
-                                                  , self.airs[p].wind, self.airs[p].price, self.airs[p].mode
-                                                  , self.airs[p].ratio, self.airs[p].aimtemp, self.airs[p].isdispatched)
-
                             self.changeairs(request, 1)
                             return 0  # 表示成功响应请求
 
