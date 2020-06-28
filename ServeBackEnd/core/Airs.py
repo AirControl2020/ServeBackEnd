@@ -20,6 +20,7 @@ class Slave:
         self.state = state
         self.ratio = ratio
         self.price = price
+        self.totprice = price
         self.roomid = roomid
         self.starttime = datetime.datetime.now()
         self.isdispatched = 0
@@ -47,10 +48,12 @@ class Slave:
             if self.mode == -1 and self.curtemp > self.aimtemp:
                 self.curtemp = self.curtemp - (0.5 + (self.wind - 2) * 0.1) * totaltime
                 self.price += 1 / (4 - self.wind) * totaltime
+                self.totprice += 1 / (4 - self.wind) * totaltime
             if self.mode == 1 and self.curtemp < self.aimtemp:
                 self.curtemp = self.curtemp + (0.5 + (self.wind - 2) * 0.1) * totaltime
                 print(self.curtemp, (0.5 + (self.wind - 2) * 0.1) * totaltime)
                 self.price += (1 / (4 - self.wind)) * totaltime
+                self.totprice += (1 / (4 - self.wind)) * totaltime
 
     def __str__(self):
         return str(self.initemp) + " " + str(self.curtemp) + " " + str(self.aimtemp) + " " + str(self.mode) + " " \
@@ -64,7 +67,7 @@ class Slave:
 
     def wrap(self):
         return {"initemp": self.initemp, "curtemp": self.curtemp, "aimtemp": self.aimtemp, "mode": "制热" if self.mode == 1 else "制冷",
-                "wind": ["低", "中", "高"][self.wind - 1], "state": ["关机", "开机且送风", "开机不送风"][self.state], "ratio": self.ratio, "price": self.price, "roomid": self.roomid}
+                "wind": ["低", "中", "高"][self.wind - 1], "state": ["关机", "开机且送风", "开机不送风"][self.state], "ratio": self.ratio, "price": self.totprice, "roomid": self.roomid}
 
 
 class myThread2(threading.Thread):

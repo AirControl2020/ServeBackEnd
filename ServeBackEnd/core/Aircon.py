@@ -200,6 +200,7 @@ class Aircon:
     def changeairs(self, request, waitorrun):
         for i in range(len(self.airs)):
             if request.room_id == self.airs[i].roomid:
+                self.airs[i].price = 0
                 self.airs[i].starttime = datetime.datetime.now()
                 if request.kind == 0:  # 开机请求,修改state
                     self.airs[i].state = waitorrun  # 这个参数表示是等待送风还是开始送风
@@ -219,11 +220,11 @@ class Aircon:
 
                 elif request.kind == 2:  # 关机请求
                     self.airs[i].state = 0
+
                     break
 
                 else:
                     print("请求类型出错")
-                self.airs[i].price = 0
 
     # 该函数用于检测空调的状态
     def listenrunning(self):
