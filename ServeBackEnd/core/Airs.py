@@ -7,7 +7,7 @@ import datetime
 import time
 import math
 
-totaltime = 0.5
+totaltime = 1.0 / 10
 
 
 class Slave:

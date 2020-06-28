@@ -150,9 +150,9 @@ class Aircon:
                             self.queue.running_list[i][3] = request.temp
                         self.queue.running_list[i][4] = request.mode
                         p = request.room_id - 301
-                        self.datahandle.writeData(self.airs[p].roomid, self.airs[p].starttime, datetime.datetime.now(), 
+                        self.datahandle.writeData(self.airs[p].roomid, self.airs[p].starttime, datetime.datetime.now(),
                                                   self.airs[p].wind, self.airs[p].price, self.airs[p].mode,
-                                                  self.airs[p].ratio, self.airs[p].aimtemp,self.airs[p].isdispatched)
+                                                  self.airs[p].ratio, self.airs[p].aimtemp, self.airs[p].isdispatched)
 
                         if request.mode == -1 and self.airs[request.room_id - 301].curtemp < request.temp or \
                                 request.mode == 1 and self.airs[request.room_id - 301].curtemp > request.temp:
@@ -161,6 +161,7 @@ class Aircon:
                             t5 = end - self.start
                             temp_list[1] = t5
                             self.queue.waiting_list.append(temp_list)
+                            print(self.queue.running_list[i])
                             self.queue.waiting_list2.append(self.queue.running_list[i][0])
                             self.queue.running_list2.remove(self.queue.running_list[i][0])
 
