@@ -202,6 +202,7 @@ class Aircon:
             if request.room_id == self.airs[i].roomid:
                 self.airs[i].price = 0
                 self.airs[i].starttime = datetime.datetime.now()
+                self.airs[i].mode = request.mode
                 if request.kind == 0:  # 开机请求,修改state
                     self.airs[i].state = waitorrun  # 这个参数表示是等待送风还是开始送风
                     break
