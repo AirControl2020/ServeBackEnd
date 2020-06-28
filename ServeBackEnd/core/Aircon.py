@@ -50,7 +50,7 @@ class Aircon:
         self.datahandle = self.handle.datadbhandler
 
     # 响应请求
-    def echoRequest(self, request):
+    def echoRequest(self, request, flag=0):
         print(str(request))
         if request.kind == 0:  # 开机请求
             print("开机")
@@ -189,7 +189,7 @@ class Aircon:
                                           , self.airs[p].wind, self.airs[p].price, self.airs[p].mode
                                           , self.airs[p].ratio, self.airs[p].aimtemp, self.airs[p].isdispatched)
 
-                self.changeairs(request, 0)
+                self.changeairs(request, flag)  # flag为0代表空调状态由1变0，flag为1代表空调状态由1变2
 
                 return 0  # 表示成功响应请求
 
@@ -220,8 +220,10 @@ class Aircon:
                     break
 
                 elif request.kind == 2:  # 关机请求
-                    self.airs[i].state = 0
-
+                    if waitorrun == 0:
+                        self.airs[i].state = 0
+                    else:
+                        self.airs[i].state = 2
                     break
 
                 else:
@@ -232,11 +234,11 @@ class Aircon:
         for air in self.airs:
             if air.state == 1 and abs(air.aimtemp - air.curtemp) <= 0.001:
                 request = Request(2, air.aimtemp, air.wind, air.roomid)
-                self.echoRequest(request)
+                self.echoRequest(request, 1)
 
             elif air.state == 2 and air.curtemp - air.aimtemp > 1:
                 request = Request(1, air.aimtemp, air.wind, air.roomid)
-                self.echoRequest(request)
+                self.echoRequest(request=request)
 
     def ping(self):
         print("pong")
