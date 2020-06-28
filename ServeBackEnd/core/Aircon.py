@@ -64,7 +64,7 @@ class Aircon:
                             request.mode == 1 and self.airs[request.room_id - 301].curtemp > request.temp:  # 如果模式不正确
                         self.queue.waiting_list.append([request.room_id, t1, request.speed, request.temp, request.mode])
                         self.queue.waiting_list2.append(request.room_id)
-                        self.changeairs(request, 0)
+                        self.changeairs(request, 2)
                         return 1
                     else:
                         self.queue.running_list.append([request.room_id, t1, request.speed, request.temp, request.mode])
@@ -80,7 +80,7 @@ class Aircon:
                         t = end - self.start
                         self.queue.waiting_list.append([request.room_id, t, request.speed, request.temp, request.mode])
                         self.queue.waiting_list2.append(request.room_id)
-                        self.changeairs(request, 0)
+                        self.changeairs(request, 2)
                         return 1  # 表示该请求正在等待中
 
                     for i in range(len(self.queue.running_list)):  # 查看该请求是否可以调换出running_list里的请求
@@ -121,7 +121,7 @@ class Aircon:
                     t4 = end - self.start
                     self.queue.waiting_list.append([request.room_id, t4, request.speed, request.temp, request.mode])
                     self.queue.waiting_list2.append(request.room_id)
-                    self.changeairs(request, 0)
+                    self.changeairs(request, 2)
                     return 1  # 表示该请求正在等待中，两分钟之后开始实施
             else:
                 return -2  # 已经开机的空调不再响应开机请求
@@ -138,7 +138,7 @@ class Aircon:
                         if request.temp != -1:
                             self.queue.waiting_list[i][3] = request.temp
                         self.queue.waiting_list[i][4] = request.mode
-                        self.changeairs(request, 0)
+                        self.changeairs(request, 2)
                         return 1  # 表示该请求正在等待中，据第一次提出请求两分钟后开始实施
 
             else:  # 空调已经在运行队列里
@@ -165,7 +165,7 @@ class Aircon:
                             self.queue.waiting_list2.append(self.queue.running_list[i][0])
                             self.queue.running_list2.remove(self.queue.running_list[i][0])
 
-                            self.changeairs(request, 0)
+                            self.changeairs(request, 2)
                             return 1
                         else:
                             self.changeairs(request, 1)
