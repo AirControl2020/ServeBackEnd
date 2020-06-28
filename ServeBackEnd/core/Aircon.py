@@ -18,8 +18,7 @@ class Request:
         self.mode = mode
 
     def __str__(self):
-        return str(self.kind) + " " + str(self.temp) + " " + str(self.speed) + " " \
-               + str(self.room_id) + " " + str(self.mode)
+        return str(self.kind) + " " + str(self.temp) + " " + str(self.speed) + " " + str(self.room_id) + " " + str(self.mode)
 
 
 class Aircon:
@@ -228,10 +227,10 @@ class Aircon:
         print("pong")
 
     def getConditon(self, idx):
-        if 305 <= idx or idx < 300:
+        if 305 < idx or idx <= 300:
             return []
         else:
-            return self.airs[idx - 300].wrap()
+            return self.airs[idx - 301].wrap()
 
     def getPay(self, idx, when):
         ret = self.handle.datadbhandler.getDataForDetail(idx, '"' + when + '"')
